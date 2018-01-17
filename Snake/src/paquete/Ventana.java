@@ -5,6 +5,7 @@
  */
 package paquete;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -27,9 +29,11 @@ public class Ventana extends JFrame implements KeyListener {
     private JFrame ventana;
     private JPanel panelInicial;
     private ArrayList<JPanel> paneles;
-    private JLabel puntaje;
+    private int puntaje;
+    private JLabel lblpuntaje;
     private Random numero;
     private Timer t;
+    private JFrame vPuntaje;
     boolean bandera = true, bandera2 = true, bandera3 = true, bandera4 = true;
     int a = 0, c = 0, x = 0;
     int cont1 = 0, cont2 = 0, cont3 = 0, cont4 = 0;
@@ -38,15 +42,28 @@ public class Ventana extends JFrame implements KeyListener {
 
         ventana = new JFrame("Snake");
         ventana.setSize(400, 400);
+        ventana.setBackground(Color.CYAN);
         ventana.setLocationRelativeTo(this);
         ventana.addKeyListener(this);
+        ventana.setResizable(false);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
 
         paneles = new ArrayList<JPanel>();
         panelInicial = new JPanel(new GridLayout(25, 25));
         numero = new Random();
         x = numero.nextInt(624);
         System.out.println(x);
+        vPuntaje = new JFrame(":v");
+        vPuntaje.setBounds(280, 185, 180, 60);
+        vPuntaje.setDefaultCloseOperation(0);
+        
+        this.lblpuntaje = new JLabel("Puntaje: 0");
+        vPuntaje.add(lblpuntaje);
+        vPuntaje.setVisible(true);
+        
+        
         for (int i = 0; i < 625; i++) {
             paneles.add(new JPanel());
             if (i == x) {
@@ -60,7 +77,6 @@ public class Ventana extends JFrame implements KeyListener {
         }
 
         ventana.add(panelInicial);
-
         ventana.setVisible(true);
     }
 
@@ -68,6 +84,7 @@ public class Ventana extends JFrame implements KeyListener {
         t = new Timer(250, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 try {
                     if (c == 1 && bandera2 == true) {
                         for (int i = 24; i < 625; i += 25) {
@@ -127,6 +144,8 @@ public class Ventana extends JFrame implements KeyListener {
                     paneles.get(a - 1).setBackground(Color.yellow);
                     x = numero.nextInt(399);
                     paneles.get(x).setBackground(Color.CYAN);
+                    puntaje = puntaje + 10;
+                    lblpuntaje.setText("Puntaje: " + puntaje);
                 }
             }
         });
@@ -178,4 +197,5 @@ public class Ventana extends JFrame implements KeyListener {
     public void keyReleased(KeyEvent ke) {
     }
 
+    
 }
