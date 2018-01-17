@@ -30,7 +30,8 @@ public class Ventana extends JFrame implements KeyListener {
     private JLabel puntaje;
     private Random numero;
     private Timer t;
-    int a = 0, c = 0;
+    boolean bandera = true, bandera2 = true, bandera3 = true, bandera4 = true;
+    int a = 0, c = 0, x = 0;
     int cont1 = 0, cont2 = 0, cont3 = 0, cont4 = 0;
 
     public void iniciaComponentes() {
@@ -42,11 +43,11 @@ public class Ventana extends JFrame implements KeyListener {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         paneles = new ArrayList<JPanel>();
-        panelInicial = new JPanel(new GridLayout(20, 20, 1, 1));
+        panelInicial = new JPanel(new GridLayout(25, 25));
         numero = new Random();
-        int x = numero.nextInt(399);
+        x = numero.nextInt(624);
         System.out.println(x);
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < 625; i++) {
             paneles.add(new JPanel());
             if (i == x) {
                 paneles.get(i).setBackground(Color.CYAN);
@@ -64,48 +65,68 @@ public class Ventana extends JFrame implements KeyListener {
     }
 
     public void Tiempo() {
-        t = new Timer(100, new ActionListener() {
+        t = new Timer(250, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (c == 1) {                        
+                    if (c == 1 && bandera2 == true) {
+                        for (int i = 24; i < 625; i += 25) {
+                            if (a == i) {
+                                paneles.get(a).setBackground(Color.black);
+                                a = a - 25;
+                                break;
+                            }
+                        }
                         a = a + 1;
                         paneles.get(a).setBackground(Color.yellow);
                         paneles.get(a - 1).setBackground(Color.black);
                     }
 
-                    if (c == 2) {
+                    if (c == 2 && bandera == true) {
+                        for (int i = 0; i < 601; i += 25) {
+                            if (a == i) {
+                                paneles.get(a).setBackground(Color.black);
+                                a = a + 25;
+                                break;
+                            }
+                        }
                         a = a - 1;
                         paneles.get(a).setBackground(Color.yellow);
                         paneles.get(a + 1).setBackground(Color.black);
                     }
 
                     if (c == 3) {
-                        a = a + 20;
+                        a = a + 25;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a - 20).setBackground(Color.black);
+                        paneles.get(a - 25).setBackground(Color.black);
                     }
 
                     if (c == 4) {
-                        a = a - 20;
+                        a = a - 25;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a + 20).setBackground(Color.black);
+                        paneles.get(a + 25).setBackground(Color.black);
                     }
                 } catch (IndexOutOfBoundsException err) {
                     System.out.println("error");
                     if (c == 3) {
                         t.stop();
-                        paneles.get(a - 20).setBackground(Color.black);
-                        a = a - 400;
+                        paneles.get(a - 25).setBackground(Color.black);
+                        a = a - 625;
                         paneles.get(a).setBackground(Color.yellow);
                         t.start();
                     } else if (c == 4) {
                         t.stop();
-                        paneles.get(a + 20).setBackground(Color.black);
-                        a = a + 400;
+                        paneles.get(a + 25).setBackground(Color.black);
+                        a = a + 625;
                         paneles.get(a).setBackground(Color.yellow);
                         t.start();
                     }
+                }
+
+                if (a == x) {
+                    paneles.get(a - 1).setBackground(Color.yellow);
+                    x = numero.nextInt(399);
+                    paneles.get(x).setBackground(Color.CYAN);
                 }
             }
         });
@@ -118,26 +139,38 @@ public class Ventana extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == 39) {
+        if (e.getKeyCode() == 39 && bandera2 == true) {
             t.start();
             c = 1;
             System.out.println("derecha");
+            bandera = false;
+            bandera3 = true;
+            bandera4 = true;
         }
-        if (e.getKeyCode() == 37) {
+        if (e.getKeyCode() == 37 && bandera == true) {
             t.start();
             c = 2;
             System.out.println("izquierda");
+            bandera2 = false;
+            bandera3 = true;
+            bandera4 = true;
         }
-        if (e.getKeyCode() == 40) {
+        if (e.getKeyCode() == 40 && bandera4 == true) {
             t.start();
             c = 3;
             System.out.println("abajo");
+            bandera3 = false;
+            bandera = true;
+            bandera2 = true;
 
         }
-        if (e.getKeyCode() == 38) {
+        if (e.getKeyCode() == 38 && bandera3 == true) {
             t.start();
             c = 4;
             System.out.println("arriba");
+            bandera4 = false;
+            bandera = true;
+            bandera2 = true;
         }
     }
 
