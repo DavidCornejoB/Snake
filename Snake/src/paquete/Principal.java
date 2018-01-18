@@ -19,7 +19,6 @@ public class Principal {
         
         Ventana v = new Ventana();
         v.iniciaComponentes();
-        v.Tiempo();
     }
     
 }
