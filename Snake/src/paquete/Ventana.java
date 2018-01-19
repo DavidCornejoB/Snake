@@ -32,18 +32,18 @@ public class Ventana extends JFrame implements KeyListener {
     private Random numero;
     private Timer t;
     private JFrame vPuntaje;
-    private int[] serpiente = new int[1];
     boolean bandera = true, bandera2 = true, bandera3 = true, bandera4 = true, bandera5 = true;
     int a = 0, c = 0, x = 0, puntajeExtra = 100, tiempo = 250, contF = 1, contC = 25;
     int cont1 = 0, cont2 = 0, cont3 = 0, cont4 = 0;
+    private int[] serpiente = new int[contF];
 
     public Ventana() {
-        this.Tiempo();
+        this.generarTiempo();
         t.start();
         this.iniciaComponentes();
     }
 
-    public void Tiempo() {
+    public void generarTiempo() {
         t = new Timer(tiempo, new ActionListener() {
 
             @Override
@@ -65,11 +65,7 @@ public class Ventana extends JFrame implements KeyListener {
                         }
                         a = a + 1;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a - contF).setBackground(Color.black);
-                        for (int i = 0; i < serpiente.length; i++) {
-                            serpiente[i] = a - i;
-                        }
-                        //paneles.get(a - contF).setBackground(Color.black);
+                        paneles.get(a - 1).setBackground(Color.black);
                     } // FIN DERECHA
                     //****************************************************************
                     if (c == 1) { // INICIO IZQUIERDA
@@ -82,68 +78,86 @@ public class Ventana extends JFrame implements KeyListener {
                         }
                         a = a - 1;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a + contF).setBackground(Color.black);
-
-                        for (int i = 0; i < serpiente.length; i++) {
-                            serpiente[i] = a + i;
-                        }
-                        //paneles.get(a + contF).setBackground(Color.black);
+                        paneles.get(a + 1).setBackground(Color.black);
                     } // FIN IZQUIERDA
                     //****************************************************************
                     if (c == 2) { // INICIO ABAJO
                         a = a + 25;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a - contC).setBackground(Color.black);
-
-                        for (int i = 0; i < serpiente.length; i++) {
-                            serpiente[i] = a - contC;
-                        }
-                        //paneles.get(a - contC).setBackground(Color.black);
+                        paneles.get(a - 25).setBackground(Color.black);
                     } // FIN ABAJO
                     //****************************************************************
                     if (c == 3) { // INICIO ARRIBA
                         a = a - 25;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a + contC).setBackground(Color.black);
-                        for (int i = 0; i < serpiente.length; i++) {
-                            serpiente[i] = a + contC;
-                        }
-                        //paneles.get(a + contC).setBackground(Color.black);
+                        paneles.get(a + 25).setBackground(Color.black);
                     } // FIN ARRIBA
 
-                } catch (IndexOutOfBoundsException err) {
+                } catch (IndexOutOfBoundsException err) {// INICIO CATCH
                     if (c == 2) {
                         t.stop();
-                        paneles.get(a - contC).setBackground(Color.black);
-                        //paneles.get(a - contC).setBackground(Color.black);
+                        paneles.get(a - 25).setBackground(Color.black);
                         a = a - 625;
                         paneles.get(a).setBackground(Color.yellow);
                         t.start();
                     } else if (c == 3) {
                         t.stop();
-                        paneles.get(a + contC).setBackground(Color.black);
-                        //paneles.get(a + contC).setBackground(Color.black);
+                        paneles.get(a + 25).setBackground(Color.black);
                         a = a + 625;
                         paneles.get(a).setBackground(Color.yellow);
                         t.start();
                     }
-                }
+                }//FIN CATCH
 
-                if (a == x) {
-                    serpiente = new int[contF];
+                if (a == x) {// INICIO COMER SERPIENTE
+                    System.out.println("holaaa");
                     x = numero.nextInt(624);
                     paneles.get(x).setBackground(Color.CYAN);
                     puntaje = puntaje + 10;
                     lblpuntaje.setText("Puntaje: " + puntaje);
                     contF++;
                     contC = contC + 25;
-                }
+                    serpiente = new int[contF];
+
+                    if (c == 0) {
+                        for (int i = 0; i < serpiente.length; i++) {
+                            serpiente[i] = a - i;
+                            System.out.println(serpiente[i]);
+                        }
+                    }
+
+                    if (c == 1) {
+                        for (int i = 0; i < serpiente.length; i++) {
+                            serpiente[i] = a + i;
+                            System.out.println(serpiente[i]);
+                        }
+                    }
+                    repintarMapa();
+                    t.stop();
+                }// FIN COMER SERPIENTE
 
                 if (puntaje >= puntajeExtra) {
                     puntajeExtra = puntajeExtra + 100;
                 }
             }
         });
+    }
+
+    public void repintarMapa() {
+        for (int i = 0; i < 625; i++) {
+
+            if (i == x) {
+                paneles.get(i).setBackground(Color.CYAN);
+
+            } else {
+                paneles.get(i).setBackground(Color.black);
+            }
+        }
+
+        for (int j = 0; j < serpiente.length; j++) {
+            paneles.get(serpiente[j]).setBackground(Color.yellow);
+        }
+
     }
 
     public void iniciaComponentes() {
@@ -160,7 +174,6 @@ public class Ventana extends JFrame implements KeyListener {
         panelInicial = new JPanel(new GridLayout(25, 25, 1, 1));
         numero = new Random();
         x = numero.nextInt(624);
-        System.out.println(x);
         vPuntaje = new JFrame(":v");
         vPuntaje.setBounds(280, 185, 180, 60);
         vPuntaje.setDefaultCloseOperation(0);
@@ -184,6 +197,7 @@ public class Ventana extends JFrame implements KeyListener {
         ventana.add(panelInicial);
         ventana.setVisible(true);
     }
+    //**************************************************************************
 
     @Override
     public void keyTyped(KeyEvent ke) {
@@ -229,5 +243,4 @@ public class Ventana extends JFrame implements KeyListener {
     @Override
     public void keyReleased(KeyEvent ke) {
     }
-
 }

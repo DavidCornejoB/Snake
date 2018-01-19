@@ -18,7 +18,6 @@ public class Principal {
         // TODO code application logic here
         
         Ventana v = new Ventana();
-        v.iniciaComponentes();
     }
     
 }
