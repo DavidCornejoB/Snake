@@ -110,7 +110,6 @@ public class Ventana extends JFrame implements KeyListener {
                 }//FIN CATCH
 
                 if (a == x) {// INICIO COMER SERPIENTE
-                    System.out.println("holaaa");
                     x = numero.nextInt(624);
                     paneles.get(x).setBackground(Color.CYAN);
                     puntaje = puntaje + 10;
@@ -119,19 +118,35 @@ public class Ventana extends JFrame implements KeyListener {
                     contC = contC + 25;
                     serpiente = new int[contF];
 
-                    if (c == 0) {
+                    if (c == 0) { // INICIO DERECHA
                         for (int i = 0; i < serpiente.length; i++) {
                             serpiente[i] = a - i;
-                            System.out.println(serpiente[i]);
                         }
-                    }
+                    } // FIN DERECHA
 
-                    if (c == 1) {
+                    if (c == 1) {// INICIO IZQUIERDA
                         for (int i = 0; i < serpiente.length; i++) {
                             serpiente[i] = a + i;
-                            System.out.println(serpiente[i]);
                         }
-                    }
+                    } // FIN IZQUIERDA
+
+                    if (c == 2) { // INICIO ABAJO
+                        int cont = 25;
+                        for (int i = 0; i < serpiente.length; i++) {
+                            serpiente[i] = a - cont;
+                            cont = cont + 25;
+                        }
+
+                    } // FIN ABAJO
+
+                    if (c == 3) { // INICIO ARRIBA
+                        int cont = 25;
+                        for (int i = 0; i < serpiente.length; i++) {
+                            serpiente[i] = a + cont;
+                            cont = cont + 25;
+                        }
+                    } // FIN ARRIBA
+
                     repintarMapa();
                     t.stop();
                 }// FIN COMER SERPIENTE
@@ -155,7 +170,22 @@ public class Ventana extends JFrame implements KeyListener {
         }
 
         for (int j = 0; j < serpiente.length; j++) {
-            paneles.get(serpiente[j]).setBackground(Color.yellow);
+            System.out.println(": " + serpiente[j]);
+            try {
+                paneles.get(serpiente[j]).setBackground(Color.yellow);
+            } catch (IndexOutOfBoundsException err) {
+                if (serpiente[j] < 0) {
+                    serpiente[j] = serpiente[j] + 625;
+                    paneles.get(serpiente[j]).setBackground(Color.yellow);
+                }
+
+                if (serpiente[j] > 624) {
+                    serpiente[j] = serpiente[j] - 625;
+                    paneles.get(serpiente[j]).setBackground(Color.yellow);
+                }
+
+            }
+
         }
 
     }
