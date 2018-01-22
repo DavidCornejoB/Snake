@@ -44,7 +44,7 @@ public class Ventana extends JFrame implements KeyListener {
     }
 
     public void generarTiempo() {
-        t = new Timer(tiempo, new ActionListener() {
+        t = new Timer(500, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -65,7 +65,8 @@ public class Ventana extends JFrame implements KeyListener {
                         }
                         a = a + 1;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a - 1).setBackground(Color.black);
+                        paneles.get(a - serpiente.length).setBackground(Color.black);
+                        System.out.println(a);
                     } // FIN DERECHA
                     //****************************************************************
                     if (c == 1) { // INICIO IZQUIERDA
@@ -78,34 +79,41 @@ public class Ventana extends JFrame implements KeyListener {
                         }
                         a = a - 1;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a + 1).setBackground(Color.black);
+                        paneles.get(a + serpiente.length).setBackground(Color.black);
+                        System.out.println(a);
                     } // FIN IZQUIERDA
                     //****************************************************************
                     if (c == 2) { // INICIO ABAJO
                         a = a + 25;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a - 25).setBackground(Color.black);
+                        paneles.get(a - (25 * serpiente.length)).setBackground(Color.black);
+                        System.out.println(a);
                     } // FIN ABAJO
                     //****************************************************************
                     if (c == 3) { // INICIO ARRIBA
                         a = a - 25;
                         paneles.get(a).setBackground(Color.yellow);
-                        paneles.get(a + 25).setBackground(Color.black);
+                        paneles.get(a + (25 * serpiente.length)).setBackground(Color.black);
+                        System.out.println(a);
                     } // FIN ARRIBA
 
                 } catch (IndexOutOfBoundsException err) {// INICIO CATCH
-                    if (c == 2) {
-                        t.stop();
-                        paneles.get(a - 25).setBackground(Color.black);
-                        a = a - 625;
-                        paneles.get(a).setBackground(Color.yellow);
-                        t.start();
-                    } else if (c == 3) {
-                        t.stop();
-                        paneles.get(a + 25).setBackground(Color.black);
-                        a = a + 625;
-                        paneles.get(a).setBackground(Color.yellow);
-                        t.start();
+                    if (a < 0 || a > 624) {
+                        if (c == 2) {
+                            System.out.println("antes: " + a);
+                            paneles.get(a - 25).setBackground(Color.black);
+                            a = a - 625;
+                            System.out.println("despues: " + a);
+                            paneles.get(a).setBackground(Color.yellow);
+
+                        } else if (c == 3) {
+                            System.out.println("ANTES: " + a);
+                            paneles.get(a + 25).setBackground(Color.black);
+                            a = a + 625;
+                            System.out.println("DESPUES: " + a);
+                            paneles.get(a).setBackground(Color.yellow);
+
+                        }
                     }
                 }//FIN CATCH
 
@@ -148,7 +156,7 @@ public class Ventana extends JFrame implements KeyListener {
                     } // FIN ARRIBA
 
                     repintarMapa();
-                    t.stop();
+                    
                 }// FIN COMER SERPIENTE
 
                 if (puntaje >= puntajeExtra) {
