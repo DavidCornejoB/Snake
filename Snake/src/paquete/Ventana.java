@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -44,7 +45,7 @@ public class Ventana extends JFrame implements KeyListener {
     }
 
     public void generarTiempo() {
-        t = new Timer(500, new ActionListener() {
+        t = new Timer(tiempo, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -65,6 +66,11 @@ public class Ventana extends JFrame implements KeyListener {
                         }
                         a = a + 1;
                         paneles.get(a).setBackground(Color.yellow);
+                        System.out.println("color al frente " + paneles.get(a + 1).getBackground());
+                        if (paneles.get(a + 1).getBackground().getRed() == 255 && paneles.get(a + 1).getBackground().getGreen() == 255 && paneles.get(a + 1).getBackground().getBlue() == 0) {
+                            JOptionPane.showMessageDialog(ventana, "Perdiste", "GameOver", JOptionPane.ERROR_MESSAGE);
+                            perderJuego();
+                        }
                         paneles.get(a - serpiente.length).setBackground(Color.black);
                         System.out.println(a);
                     } // FIN DERECHA
@@ -79,6 +85,11 @@ public class Ventana extends JFrame implements KeyListener {
                         }
                         a = a - 1;
                         paneles.get(a).setBackground(Color.yellow);
+                        System.out.println("color al frente " + paneles.get(a + 1).getBackground());
+                        if (paneles.get(a - 1).getBackground().getRed() == 255 && paneles.get(a - 1).getBackground().getGreen() == 255 && paneles.get(a - 1).getBackground().getBlue() == 0) {
+                            JOptionPane.showMessageDialog(ventana, "Perdiste", "GameOver", JOptionPane.ERROR_MESSAGE);
+                            perderJuego();
+                        }
                         paneles.get(a + serpiente.length).setBackground(Color.black);
                         System.out.println(a);
                     } // FIN IZQUIERDA
@@ -86,6 +97,11 @@ public class Ventana extends JFrame implements KeyListener {
                     if (c == 2) { // INICIO ABAJO
                         a = a + 25;
                         paneles.get(a).setBackground(Color.yellow);
+                        System.out.println("color al frente " + paneles.get(a + 25).getBackground());
+                        if (paneles.get(a + 25).getBackground().getRed() == 255 && paneles.get(a + 25).getBackground().getGreen() == 255 && paneles.get(a + 25).getBackground().getBlue() == 0) {
+                            JOptionPane.showMessageDialog(ventana, "Perdiste", "GameOver", JOptionPane.ERROR_MESSAGE);
+                            perderJuego();
+                        }
                         paneles.get(a - (25 * serpiente.length)).setBackground(Color.black);
                         System.out.println(a);
                     } // FIN ABAJO
@@ -93,6 +109,11 @@ public class Ventana extends JFrame implements KeyListener {
                     if (c == 3) { // INICIO ARRIBA
                         a = a - 25;
                         paneles.get(a).setBackground(Color.yellow);
+                        System.out.println("color al frente " + paneles.get(a - 25).getBackground());
+                        if (paneles.get(a - 25).getBackground().getRed() == 255 && paneles.get(a - 25).getBackground().getGreen() == 255 && paneles.get(a - 25).getBackground().getBlue() == 0) {
+                            JOptionPane.showMessageDialog(ventana, "Perdiste", "GameOver", JOptionPane.ERROR_MESSAGE);
+                            perderJuego();
+                        }
                         paneles.get(a + (25 * serpiente.length)).setBackground(Color.black);
                         System.out.println(a);
                     } // FIN ARRIBA
@@ -100,25 +121,36 @@ public class Ventana extends JFrame implements KeyListener {
                 } catch (IndexOutOfBoundsException err) {// INICIO CATCH
                     if (a < 0 || a > 624) {
                         if (c == 2) {
-                            System.out.println("antes: " + a);
                             paneles.get(a - 25).setBackground(Color.black);
                             a = a - 625;
-                            System.out.println("despues: " + a);
                             paneles.get(a).setBackground(Color.yellow);
 
                         } else if (c == 3) {
-                            System.out.println("ANTES: " + a);
                             paneles.get(a + 25).setBackground(Color.black);
                             a = a + 625;
-                            System.out.println("DESPUES: " + a);
                             paneles.get(a).setBackground(Color.yellow);
 
                         }
                     }
                 }//FIN CATCH
 
+                if (a > 624) {
+                    a = a - 625;
+                    System.out.println("salio");
+                }
+
+                if (a < 0) {
+                    a = a + 625;
+                    System.out.println("salio");
+                }
+
                 if (a == x) {// INICIO COMER SERPIENTE
-                    x = numero.nextInt(624);
+                    do {
+                        x = numero.nextInt(624);
+                        if (paneles.get(x).getBackground().getRed() == 255 && paneles.get(x).getBackground().getGreen() == 255 && paneles.get(x).getBackground().getBlue() == 0) {
+                            x = numero.nextInt(624);
+                        }
+                    } while (paneles.get(x).getBackground().getRed() == 255 && paneles.get(x).getBackground().getGreen() == 255 && paneles.get(x).getBackground().getBlue() == 0);
                     paneles.get(x).setBackground(Color.CYAN);
                     puntaje = puntaje + 10;
                     lblpuntaje.setText("Puntaje: " + puntaje);
@@ -155,15 +187,37 @@ public class Ventana extends JFrame implements KeyListener {
                         }
                     } // FIN ARRIBA
 
-                    repintarMapa();
-                    
+                    //repintarMapa();
                 }// FIN COMER SERPIENTE
 
                 if (puntaje >= puntajeExtra) {
                     puntajeExtra = puntajeExtra + 100;
                 }
+
             }
         });
+    }
+
+    public void perderJuego() {
+        a = 0;
+        x = numero.nextInt(624);
+        for (int i = 0; i < 625; i++) {
+            paneles.add(new JPanel());
+            if (i == x) {
+                paneles.get(i).setBackground(Color.CYAN);
+                panelInicial.add(paneles.get(i));
+
+            } else {
+                paneles.get(i).setBackground(Color.black);
+                panelInicial.add(paneles.get(i));
+            }
+        }
+        contF = 1;
+        puntaje = 0;
+        lblpuntaje.setText("Puntaje: " + puntaje);
+        puntajeExtra = 100;
+        serpiente = new int[contF];
+
     }
 
     public void repintarMapa() {
