@@ -33,9 +33,9 @@ public class Ventana extends JFrame implements KeyListener {
     private Random numero;
     private Timer t;
     private JFrame vPuntaje;
-    boolean bandera = true, bandera2 = true, bandera3 = true, bandera4 = true, bandera5 = true;
+    boolean bandera = true, bandera2 = true, bandera3 = true, bandera4 = true, bandera5 = true, iz = false, de = false, ar = false, ab = false;
     int a = 0, c = 0, x = 0, puntajeExtra = 100, tiempo = 250, contF = 1, contC = 25;
-    int cont1 = 0, cont2 = 0, cont3 = 0, cont4 = 0;
+    int cont1 = 0, cont2 = 0, cont3 = 0, cont4 = 0, aux =0, aux2 = 0;
     private int[] serpiente = new int[contF];
 
     public Ventana() {
@@ -56,7 +56,29 @@ public class Ventana extends JFrame implements KeyListener {
                 }
                 //*********************************************************************
                 try {
+
                     if (c == 0) { // INICIO DERECHA
+                        de = true;
+                        if (ar == true) {
+                            aux = serpiente.length;
+                            for (int i = 0; i < serpiente.length; i++) {
+                                paneles.get(a + (25 * aux)).setBackground(Color.black);
+                                aux--;
+                            }
+                            if (aux == 0) {
+                                ar = false;
+                            }
+                        }
+                        if (ab == true) {
+                            aux = serpiente.length;
+                            for (int i = 0; i < serpiente.length; i++) {
+                                paneles.get(a - (25 * aux)).setBackground(Color.black);
+                                aux--;
+                            }
+                            if (aux == 0) {
+                                ab = false;
+                            }
+                        }
                         for (int i = 24; i < 625; i += 25) {
                             if (a == i) {
                                 paneles.get(a).setBackground(Color.black);
@@ -66,7 +88,6 @@ public class Ventana extends JFrame implements KeyListener {
                         }
                         a = a + 1;
                         paneles.get(a).setBackground(Color.yellow);
-                        System.out.println("color al frente " + paneles.get(a + 1).getBackground());
                         if (paneles.get(a + 1).getBackground().getRed() == 255 && paneles.get(a + 1).getBackground().getGreen() == 255 && paneles.get(a + 1).getBackground().getBlue() == 0) {
                             JOptionPane.showMessageDialog(ventana, "Perdiste", "GameOver", JOptionPane.ERROR_MESSAGE);
                             perderJuego();
@@ -76,6 +97,27 @@ public class Ventana extends JFrame implements KeyListener {
                     } // FIN DERECHA
                     //****************************************************************
                     if (c == 1) { // INICIO IZQUIERDA
+                        iz = true;
+                        if (ar == true) {
+                            aux = serpiente.length;
+                            for (int i = 0; i < serpiente.length; i++) {
+                                paneles.get(a + (25 * aux)).setBackground(Color.black);
+                                aux--;
+                            }
+                            if (aux == 0) {
+                                ar = false;
+                            }
+                        }
+                        if (ab == true) {
+                            aux = serpiente.length;
+                            for (int i = 0; i < serpiente.length; i++) {
+                                paneles.get(a - (25 * aux)).setBackground(Color.black);
+                                aux--;
+                            }
+                            if (aux == 0) {
+                                ab = false;
+                            }
+                        }
                         for (int i = 0; i < 601; i += 25) {
                             if (a == i) {
                                 paneles.get(a).setBackground(Color.black);
@@ -85,7 +127,6 @@ public class Ventana extends JFrame implements KeyListener {
                         }
                         a = a - 1;
                         paneles.get(a).setBackground(Color.yellow);
-                        System.out.println("color al frente " + paneles.get(a + 1).getBackground());
                         if (paneles.get(a - 1).getBackground().getRed() == 255 && paneles.get(a - 1).getBackground().getGreen() == 255 && paneles.get(a - 1).getBackground().getBlue() == 0) {
                             JOptionPane.showMessageDialog(ventana, "Perdiste", "GameOver", JOptionPane.ERROR_MESSAGE);
                             perderJuego();
@@ -95,9 +136,9 @@ public class Ventana extends JFrame implements KeyListener {
                     } // FIN IZQUIERDA
                     //****************************************************************
                     if (c == 2) { // INICIO ABAJO
+                        ab = true;
                         a = a + 25;
                         paneles.get(a).setBackground(Color.yellow);
-                        System.out.println("color al frente " + paneles.get(a + 25).getBackground());
                         if (paneles.get(a + 25).getBackground().getRed() == 255 && paneles.get(a + 25).getBackground().getGreen() == 255 && paneles.get(a + 25).getBackground().getBlue() == 0) {
                             JOptionPane.showMessageDialog(ventana, "Perdiste", "GameOver", JOptionPane.ERROR_MESSAGE);
                             perderJuego();
@@ -107,9 +148,9 @@ public class Ventana extends JFrame implements KeyListener {
                     } // FIN ABAJO
                     //****************************************************************
                     if (c == 3) { // INICIO ARRIBA
+                        ar = true;
                         a = a - 25;
                         paneles.get(a).setBackground(Color.yellow);
-                        System.out.println("color al frente " + paneles.get(a - 25).getBackground());
                         if (paneles.get(a - 25).getBackground().getRed() == 255 && paneles.get(a - 25).getBackground().getGreen() == 255 && paneles.get(a - 25).getBackground().getBlue() == 0) {
                             JOptionPane.showMessageDialog(ventana, "Perdiste", "GameOver", JOptionPane.ERROR_MESSAGE);
                             perderJuego();
